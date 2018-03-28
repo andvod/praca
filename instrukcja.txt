@@ -1,0 +1,66 @@
+1) instalacja java SE
+http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+https://www.tutorialspoint.com/java/java_environment_setup.htm
+
+* nieobowi¹zkowe
+2) instalacja eclipse
+https://www.eclipse.org/downloads/
+Eclipse EE for Java Developers
+
+3) instalacja mysql
+https://dev.mysql.com/downloads/windows/installer/5.7.html
+przy instalacji wybierz:  mysql server
+utworz nowego u¿ytkownika z
+	login: andvod
+	password: vodvud10
+
+4) importowanie sql
+wejdŸ do mysql aplikacji
+haslo: vodvud10
+utworz schemat:  create schema test;
+w concole windows:	mysql -u andvod -p -h localhost test < db_backup.sql
+
+5) instalacja i konfiguracja tomcat
+wybirz tomcat 8.0.*	https://tomcat.apache.org/download-80.cgi
+w conf/server.xml ->     
+    <Connector port="8080" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" />
+
+    <Connector
+           protocol="org.apache.coyote.http11.Http11NioProtocol"
+           port="8443" maxThreads="200"
+           scheme="https" secure="true" SSLEnabled="true"
+           keystoreFile="conf/keystore.jks" keystorePass="changeit"
+           clientAuth="false" sslProtocol="TLS"/>
+
+    <Connector port="8090" maxHttpHeaderSize="8192"
+               maxThreads="150" minSpareThreads="25" maxSpareThreads="75"
+               enableLookups="false" redirectPort="8443" acceptCount="100"
+               connectionTimeout="20000" disableUploadTimeout="true" />
+
+jeœli istniej¹ inne konektory z odpowiednimi portami ich trzeba usun¹æ
+
+w conf/web.xml ->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Entire Application</web-resource-name>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+
+
+6) certyfikat
+kopiowanie keystore.jks w conf
+dodaj swój ip adres do hosts lub podmienic jeden z ostatnich, gdzie domena andvod.com
+podmieniæ cacerts w Java\jdk1.8.*\jre\lib\security
+importowanie wibit-test-cert.pfx do przegl¹darki
+
+7) import projektu
+skopiuj w apache-tomcat-8.0.43\webapps
+w eclipse import war project
+
+
